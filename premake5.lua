@@ -41,7 +41,7 @@ workspace "uavOS"
 project "source"
 	cppdialect "C++17"
 	location "workspace/source"
-	kind "SharedLib"
+	kind "ConsoleApp"
 	language "C++"
 
 	targetdir ("bin/" .. outputdir)
