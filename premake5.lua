@@ -85,3 +85,11 @@ project "Test"
 		"include",
 		"include/test"
 	}
+project "mavsdk"
+	kind "Makefile"
+	flags "NoPCH"
+	language "C++"
+
+	buildcommands {
+		"cd ../vendor/mavsdk && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_BACKEND=ON -Bbuild/default -H."
+   	}
