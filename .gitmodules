@@ -1,3 +1,0 @@
-[submodule "vendor/mavsdk"]
-	path = vendor/mavsdk
-	url = https://github.com/mavlink/MAVSDK

@@ -14,3 +14,9 @@
 #include <unordered_set>
 #include <map>
 #include <fstream>
+
+#include <fcntl.h>
+#include <unistd.h>
+#include <termios.h>
+#include <pthread.h>
+#include <signal.h>

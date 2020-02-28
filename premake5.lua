@@ -38,7 +38,7 @@ workspace "uavOS"
 	filter "configurations:Release"
 		defines "UAV_RELEASE"
 		optimize "On"
-project "source"
+project "Source"
 	cppdialect "C++17"
 	location "workspace/source"
 	kind "ConsoleApp"
@@ -85,11 +85,3 @@ project "Test"
 		"include",
 		"include/test"
 	}
-project "mavsdk"
-	kind "Makefile"
-	flags "NoPCH"
-	language "C++"
-
-	buildcommands {
-		"cd ../vendor/mavsdk && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_BACKEND=ON -Bbuild/default -H."
-   	}
