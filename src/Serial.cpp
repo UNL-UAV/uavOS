@@ -162,10 +162,11 @@ int Serial::read(uint8_t& cp){
 	return result;
 };
 
-void Serial::write(char* buffer, int length){
+int Serial::write(char* buffer, int length){
 	pthread_mutex_lock(&this->_lock);
-	::write(this->_fd, buffer, length);
+	int len = ::write(this->_fd, buffer, length);
 	tcdrain(this->_fd);
 	pthread_mutex_unlock(&this->_lock);
+	return len;
 };
 };
