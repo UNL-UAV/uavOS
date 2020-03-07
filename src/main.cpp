@@ -50,9 +50,9 @@ int main(int argc, char** argv){
 	readRunner();
     char tune [30] = {'a', 'b', 'c', 'd'};   //play this tune
     char tune2 [30] = {'a', 'b', 'c', 'd'};  //play this tune extenstion
-    mavlink_message_t *playTune;             //message holder
-    mavlink_msg_play_tune_pack(255, 1, playTune, 255, 1, tune, tune2); //write the message into the mavlink format
-	mavWriter(playTune);                     //attempt to write to the serail
+    mavlink_message_t playTune;             //message holder
+    mavlink_msg_play_tune_pack(1, 255, &playTune, 1, 255, tune, tune2); //write the message into the mavlink format
+	mavWriter(playTune);                     //attempt to write to the serial
 
 	return 0;
 }
