@@ -48,9 +48,15 @@ void mavWriter(mavlink_message_t* message){
 
 void writeHeartbeat(){
 	mavlink_message_t heartbeat;             //message holder
-	mavlink_msg_heartbeat_pack(1, 255, &heartbeat, 2, 0, 128, 0, 7);
+	mavlink_msg_heartbeat_pack(1, 250, &heartbeat, 2, 0, 128, 0, 7);
 	mavWriter(&heartbeat);
-	std::cout << "Sent Heartbeat" << std::endl;
+	mavlink_message_t tune;
+	mavlink_msg_play_tune_v2_pack(1, 250, &tune, 1, 1, 1, "l8 g a b g l16 g a b g");
+	//mavWriter(&tune);
+	mavlink_message_t throttle;
+	mavlink_msg_command_int_pack(250, 250, &throttle, 1, 1, MAV_FRAME_LOCAL_NED, MAV_CMD_DO_CHANGE_SPEED, 1, 0,
+    2, 1, 1, 1, 0, 0, 0);
+	mavWriter(&throttle);
 }
 
 void* writeRunner(void* test){
