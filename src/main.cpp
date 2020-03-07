@@ -54,6 +54,11 @@ int main(int argc, char** argv){
 	mavWriter(&heartbeat);
 	mavlink_message_t tune;
 	mavlink_msg_play_tune_v2_pack(1, 250, &tune, 1, 1, 1, "l8 g a b g l16 g a b g");
-	mavWriter(&tune);
+	//mavWriter(&tune);
+	mavlink_message_t throttle;
+	mavlink_msg_command_int_pack(250, 250, &throttle, 1, 1, MAV_FRAME_LOCAL_NED, MAV_CMD_DO_CHANGE_SPEED, 1, 0,
+    2, 1, 1, 1, 0, 0, 0);
+	mavWriter(&throttle);
+
 	return 0;
 }
