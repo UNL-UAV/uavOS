@@ -15,7 +15,7 @@ public:
 	void start();
 	void stop();
 	void write(int len, char* buffer);
-	void read(uint8_t& cp);
+	int read(uint8_t& cp);
 private:
 };
 }

@@ -154,10 +154,12 @@ void Serial::stop(){
 	}
 }
 
-void Serial::read(uint8_t& cp){
+int Serial::read(uint8_t& cp){
 	pthread_mutex_lock(&this->_lock);
 	int result = ::read(this->_fd, &cp, 1);
 	pthread_mutex_unlock(&this->_lock);
+
+	return result;
 };
 
 void Serial::write(int length, char* buffer){

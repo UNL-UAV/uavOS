@@ -1,6 +1,7 @@
 outputdir = "%{cfg.buildcfg}/%{cfg.system}-%{cfg.architecture}"
 
 includeDir = {}
+includeDir["mavLibV2"] = "vendor/mavlink_libv2"
 workspace "uavOS"
 	startproject "source"
 	location "workspace"
@@ -55,7 +56,8 @@ project "Source"
 	}
 	includedirs{
 		"src",
-		"include"
+		"include",
+		includeDir["mavLibV2"]
 	}
 project "Test"
 	cppdialect "C++17"
