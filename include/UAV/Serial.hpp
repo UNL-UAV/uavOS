@@ -14,7 +14,7 @@ public:
 
 	void start();
 	void stop();
-	void write(char* buffer, int len);
+	int write(char* buffer, int len);
 	int read(uint8_t& cp);
 private:
 };

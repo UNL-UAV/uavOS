@@ -17,7 +17,7 @@ void quit_handler( int sig ){
 
 //TODO: Dedicated Thread...
 void readRunner(){
-	std::cout << "Started Reader"
+	std::cout << "Started Reader";
 	uint8_t hasDecoded =0;
 	mavlink_message_t msg;
 	mavlink_status_t status;
@@ -39,17 +39,28 @@ void readRunner(){
 
 void mavWriter(mavlink_message_t* message){
 	char buffer[300];
-	unsigned len = mavlink_msg_to_send_buffer((uint8_t*)buf, message);
-	serial.write(buffer, len);
+	unsigned len = mavlink_msg_to_send_buffer((uint8_t*)buffer, message);
+	int leng = serial.write(buffer, len);
+	std::cout << "Written " << leng << std::endl;
 }
 
 int main(int argc, char** argv){
 	signal(SIGINT,quit_handler);
 	serial.start();
 	std::cout << "Started Port" << std::endl;
-	readRunner();
+<<<<<<< HEAD
+	//readRunner();
     mavlink_message_t playTune;             //message holder
     mavlink_msg_play_tune_v2_pack(1, 0, &playTune, 1, 0, 1, "l8 g a b g l16 g a b g");
+	mavWrite(playTune);
 
+=======
+	//readRunner();
+    char tune [30] = {'a', 'b', 'c', 'd'};   //play this tune
+    char tune2 [30] = {'a', 'b', 'c', 'd'};  //play this tune extenstion
+    mavlink_message_t playTune;             //message holder
+    mavlink_msg_play_tune_pack(1, 255, &playTune, 1, 255, tune, tune2); //write the message into the mavlink format
+	mavWriter(playTune);                     //attempt to write to the serial
+>>>>>>> 89a2b72235a118130c13745c52470e586697a209
 	return 0;
 }
