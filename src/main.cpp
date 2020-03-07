@@ -48,19 +48,9 @@ int main(int argc, char** argv){
 	signal(SIGINT,quit_handler);
 	serial.start();
 	std::cout << "Started Port" << std::endl;
-<<<<<<< HEAD
 	//readRunner();
-    mavlink_message_t playTune;             //message holder
-    mavlink_msg_play_tune_v2_pack(1, 0, &playTune, 1, 0, 1, "l8 g a b g l16 g a b g");
-	mavWrite(playTune);
-
-=======
-	//readRunner();
-    char tune [30] = {'a', 'b', 'c', 'd'};   //play this tune
-    char tune2 [30] = {'a', 'b', 'c', 'd'};  //play this tune extenstion
-    mavlink_message_t playTune;             //message holder
-    mavlink_msg_play_tune_pack(1, 255, &playTune, 1, 255, tune, tune2); //write the message into the mavlink format
-	mavWriter(playTune);                     //attempt to write to the serial
->>>>>>> 89a2b72235a118130c13745c52470e586697a209
+    mavlink_message_t heartbeat;             //message holder
+	mavlink_msg_heartbeat_pack(1, 255, &heartbeat, 2, 0, 128, 0, 7);
+	mavWrite(&heartbeat);
 	return 0;
 }
