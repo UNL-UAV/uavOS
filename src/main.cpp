@@ -50,7 +50,10 @@ int main(int argc, char** argv){
 	std::cout << "Started Port" << std::endl;
 	//readRunner();
     mavlink_message_t heartbeat;             //message holder
-	mavlink_msg_heartbeat_pack(1, 255, &heartbeat, 2, 0, 128, 0, 7);
-	mavWrite(&heartbeat);
+	mavlink_msg_heartbeat_pack(1, 250, &heartbeat, 2, 0, 128, 0, 7);
+	mavWriter(&heartbeat);
+	mavlink_message_t tune;
+	mavlink_msg_play_tune_v2_pack(1, 250, &tune, 1, 1, 1, "l8 g a b g l16 g a b g");
+	mavWriter(&tune);
 	return 0;
 }
