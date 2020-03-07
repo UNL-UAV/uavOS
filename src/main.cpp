@@ -48,5 +48,11 @@ int main(int argc, char** argv){
 	serial.start();
 	std::cout << "Started Port" << std::endl;
 	readRunner();
+    char tune [30] = {'a', 'b', 'c', 'd'};   //play this tune
+    char tune2 [30] = {'a', 'b', 'c', 'd'};  //play this tune extenstion
+    mavlink_message_t *playTune;             //message holder
+    mavlink_msg_play_tune_pack(255, 1, playTune, 255, 1, tune, tune2); //write the message into the mavlink format
+	mavWriter(playTune);                     //attempt to write to the serail
+
 	return 0;
 }
