@@ -15,7 +15,9 @@ void quit_handler( int sig ){
 	serial.stop();
 }
 
+//TODO: Dedicated Thread...
 void readRunner(){
+	std::cout << "Started Reader"
 	uint8_t hasDecoded =0;
 	mavlink_message_t msg;
 	mavlink_status_t status;
@@ -33,6 +35,12 @@ void readRunner(){
 			}
 		}
 	}
+}
+
+void mavWriter(mavlink_message_t* message){
+	char buffer[300];
+	unsigned len = mavlink_msg_to_send_buffer((uint8_t*)buf, message);
+	serial.write(buffer, len);
 }
 
 int main(int argc, char** argv){
