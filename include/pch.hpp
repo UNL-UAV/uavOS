@@ -19,4 +19,5 @@
 #include <unistd.h>
 #include <termios.h>
 #include <pthread.h>
+#include <thread>
 #include <signal.h>

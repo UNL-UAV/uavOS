@@ -1,13 +1,13 @@
 #include "pch.hpp"
 #include "UAV/uavOS.hpp"
+
+void quit_handler( int sig ){
+	
+}
+
 int main(int argc, char** argv){
-	std::string port = "/dev/null";
+	std::string port = "/dev/cu.usbmodem14201";
 	UNL::UAV::Serial serial(port, 9600);
-	serial.start();
-	char* buffer = "Hello World";
-	serial.write(11, buffer);
-	uint8_t cp;
-	serial.read(cp);
-	serial.stop();
+	signal(SIGINT,quit_handler);
 	return 0;
 }
