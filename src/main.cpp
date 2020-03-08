@@ -192,6 +192,14 @@ void offBoard(bool flag){
 			targetSysId, 		// @param target_system The system setting the mode
 			1, 			// @param base_mode The new base mode (Should be 1 to use custom_mode)
 			mode);			// @param custom_mode The new autopilot-specific mode. Defined in ArduCopter/defines.h
+	mavlink_message_t offBoard;
+	mavlink_msg_command_int_pack(250, 1, &offBoard, 1, 0, MAV_FRAME_LOCAL_NED, MAV_CMD_DO_GUIDED_MASTER, 1, 0,
+    250, 250, 0, 0, 0, 0, 0);
+	mavWriter(&offBoard);
+
+    mavlink_msg_command_int_pack(250, 250, &offBoard, 1, 0, MAV_FRAME_LOCAL_NED, MAV_CMD_NAV_GUIDED_ENABLE,
+    1, 0, 1, 0, 0, 0, 0, 0, 0);
+	mavWriter(&offBoard);
 }
 
 void writeHeartbeat(){
