@@ -4,7 +4,7 @@
 #include <pthread.h>
 
 static std::thread readThread;
-static std::string port = "/dev/cu.usbmodem01";
+static std::string port = "/dev/cu.usbmodem14101";
 static UNL::UAV::Serial serial(port, 57600);
 static bool running = true;
 static pthread_t readThreadID;
@@ -33,7 +33,7 @@ void* readRunner(void* arg){
 			hasDecoded = mavlink_parse_char(MAVLINK_COMM_1, cp, &msg, &status);
 			if(hasDecoded){
 				std::cout << std::endl;
-			 	std::cout << "Decoded" << std::endl;
+			 	std::cout << "Read> ";
 			 	switch(msg.msgid){
 			 		case MAVLINK_MSG_ID_HEARTBEAT: std::cout << "MAVLINK_MSG_ID_HEARTBEAT" << std::endl; heartbeats++; break;
 case MAVLINK_MSG_ID_SYS_STATUS: std::cout << "MAVLINK_MSG_ID_SYS_STATUS" << std::endl; break;
@@ -160,7 +160,14 @@ case MAVLINK_MSG_ID_MEMORY_VECT: std::cout << "MAVLINK_MSG_ID_MEMORY_VECT" << st
 case MAVLINK_MSG_ID_DEBUG_VECT: std::cout << "MAVLINK_MSG_ID_DEBUG_VECT" << std::endl; break;
 case MAVLINK_MSG_ID_NAMED_VALUE_FLOAT: std::cout << "MAVLINK_MSG_ID_NAMED_VALUE_FLOAT" << std::endl; break;
 case MAVLINK_MSG_ID_NAMED_VALUE_INT: std::cout << "MAVLINK_MSG_ID_NAMED_VALUE_INT" << std::endl; break;
-case MAVLINK_MSG_ID_STATUSTEXT: std::cout << "MAVLINK_MSG_ID_STATUSTEXT" << std::endl; break;
+case MAVLINK_MSG_ID_STATUSTEXT: 
+	mavlink_statustext_t statusText;
+	mavlink_msg_statustext_decode(&msg, &statusText);
+	std::cout << "MAVLINK_MSG_ID_STATUSTEXT" << std::endl; break;
+	for(auto& i : statusText.text){
+		std::cout << i;
+	}
+	std::cout << std::endl;
 case MAVLINK_MSG_ID_DEBUG: std::cout << "MAVLINK_MSG_ID_DEBUG" << std::endl; break;
 			 	default: std::cout << "UNKOWN" << std::endl; break;
 			 	}
@@ -174,20 +181,32 @@ void mavWriter(mavlink_message_t* message){
 	char buffer[300];
 	unsigned len = mavlink_msg_to_send_buffer((uint8_t*)buffer, message);
 	int leng = serial.write(buffer, len);
-	std::cout << "Written " << leng << std::endl;
+	std::cout << "Write> ID:" << message->msgid << " Write Length: " << leng << " bufferLength: "<< len << std::endl;
+}
+
+void offBoard(bool flag){
+	mavlink_msg_set_mode_pack(
+			250, 	// @param system_id ID of this system
+			1,	// @param component_id ID of this component (e.g. 200 for IMU)
+			&msg, 			// @param msg The MAVLink message to compress the data into
+			targetSysId, 		// @param target_system The system setting the mode
+			1, 			// @param base_mode The new base mode (Should be 1 to use custom_mode)
+			mode);			// @param custom_mode The new autopilot-specific mode. Defined in ArduCopter/defines.h
 }
 
 void writeHeartbeat(){
+	offBoard(true);
 	mavlink_message_t heartbeat;             //message holder
 	mavlink_msg_heartbeat_pack(1, 250, &heartbeat, 2, 0, 128, 0, 7);
 	mavWriter(&heartbeat);
 	mavlink_message_t tune;
 	mavlink_msg_play_tune_v2_pack(1, 250, &tune, 1, 1, 1, "l8 g a b g l16 g a b g");
-	//mavWriter(&tune);
+	mavWriter(&tune);
 	mavlink_message_t throttle;
 	mavlink_msg_command_int_pack(250, 250, &throttle, 1, 1, MAV_FRAME_LOCAL_NED, MAV_CMD_DO_CHANGE_SPEED, 1, 0,
     2, 1, 1, 1, 0, 0, 0);
 	mavWriter(&throttle);
+	offBoard(false);
 }
 
 void* writeRunner(void* test){

@@ -164,9 +164,9 @@ int Serial::read(uint8_t& cp){
 
 int Serial::write(char* buffer, int length){
 	pthread_mutex_lock(&this->_lock);
-	int len = ::write(this->_fd, buffer, length);
+	const int bytesWritten = static_cast<int>(::write(this->_fd, buffer, length));
 	tcdrain(this->_fd);
 	pthread_mutex_unlock(&this->_lock);
-	return len;
+	return bytesWritten;
 };
 };
