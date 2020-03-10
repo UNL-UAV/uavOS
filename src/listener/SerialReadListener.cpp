@@ -1,14 +1,15 @@
 #include "UAV/listeners/SerialReadListener.hpp"
-#include "common/mavlink.hpp"
+#include "common/mavlink.h"
+#include "UAV/events/PacketReceivedEvent.hpp"
 
 namespace UNL::UAV::Listener{
 void SerialReadListener::onEvent(UNL::UAV::Event::Event* e){
-	UNL::UAV::Events::PacketReceivedEvent* PRE = dynamic_cast<PacketReceivedEvent*>(e);
+	UNL::UAV::Events::PacketReceivedEvent* PRE = static_cast<UNL::UAV::Events::PacketReceivedEvent*>(e);
 	mavlink_message_t msg = PRE->getMessage();
 
 	std::cout << "Read> ";
  	switch(msg.msgid){
-		case MAVLINK_MSG_ID_HEARTBEAT: std::cout << "MAVLINK_MSG_ID_HEARTBEAT" << std::endl; heartbeats++; break;
+		case MAVLINK_MSG_ID_HEARTBEAT: std::cout << "MAVLINK_MSG_ID_HEARTBEAT" << std::endl; break;
 		case MAVLINK_MSG_ID_SYS_STATUS: std::cout << "MAVLINK_MSG_ID_SYS_STATUS" << std::endl; break;
 		case MAVLINK_MSG_ID_SYSTEM_TIME: std::cout << "MAVLINK_MSG_ID_SYSTEM_TIME" << std::endl; break;
 		case MAVLINK_MSG_ID_PING: std::cout << "MAVLINK_MSG_ID_PING" << std::endl; break;

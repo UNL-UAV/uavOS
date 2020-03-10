@@ -7,7 +7,7 @@ namespace UNL::UAV::Events{
 	private:
 		mavlink_message_t _message;
 	public:
-		PacketReceivedEvent(const mavlink_message_t& message);
+		PacketReceivedEvent(const mavlink_message_t& message) : _message(message){}
 		inline const mavlink_message_t& getMessage() const {return _message;};
 	};
 }

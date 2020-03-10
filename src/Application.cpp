@@ -7,8 +7,12 @@ Application::Application(const Serial& serial): _serial(serial){
 
 void Application::init(){
 	this->_serial.start();
-	::pthread_create(&(this->_readThreadID), NULL, (void*) &(Application::readThread), this);
-	::pthread_create(&(this->_writeThreadID), NULL, (void*) &(Application::writeThread), this);
+	::pthread_create(&(this->_readThreadID), NULL, [](void* self) -> void* {
+		return static_cast<Application*>(self)->readThread();
+	}, this);
+	::pthread_create(&(this->_writeThreadID), NULL, [](void* self) -> void* {
+		return static_cast<Application*>(self)->writeThread();
+	}, this);
 }
 
 void Application::addReadListener(UNL::UAV::Event::Listener& listener){
@@ -27,7 +31,7 @@ void* Application::readThread(){
 			hasDecoded = mavlink_parse_char(MAVLINK_COMM_1, cp, &msg, &status);
 			if(hasDecoded){
 				Events::PacketReceivedEvent* event = new Events::PacketReceivedEvent(msg);
-				this->_readDispacher.dispatch(event);
+				this->_readDispacher.dispatch(static_cast<Event::Event*>(event));
 
 				//Clean up if not memory leak.
 				delete event;
@@ -45,8 +49,8 @@ void* Application::writeThread(){
 void Application::quitHandler(int sig){
 	std::cout << "Received " << sig << std::endl;
 	this->_running = false;
-	::pthread_join(_readThreadID, NULL);
-	::pthread_join(_writeThreadID, NULL);
+	::pthread_join(_readThreadID, nullptr);
+	::pthread_join(_writeThreadID, nullptr);
 	_serial.stop();
 }
 
