@@ -33,7 +33,7 @@ void* Application::readThread(){
 		if(res){
 			hasDecoded = mavlink_parse_char(MAVLINK_COMM_1, cp, &msg, &status);
 			if(hasDecoded){
-				Events::PacketReceivedEvent event = Events::PacketReceivedEvent(msg);
+				Events::PacketReceivedEvent event = Events::PacketReceivedEvent(this->_serial, msg);
 				this->_readDispacher.dispatch(&event);
 			}
 		}

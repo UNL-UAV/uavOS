@@ -9,8 +9,10 @@ int main(int argc, char** argv){
 	std::string port = "/dev/cu.usbmodem14101";
 	UNL::UAV::Serial serial(port, 57600);
 	UNL::UAV::Application app(serial);
+	
 	UNL::UAV::Listener::SerialReadListener srl;
 	app.addReadListener(srl);
+	
 	app.init();
 	while(app.isRunning());
 	return 0;
