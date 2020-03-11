@@ -1,11 +1,10 @@
 #include "UAV/event/Dispatcher.hpp"
-
+#include "UAV/Log.hpp"
 namespace UNL::UAV::Event{
 void Dispatcher::dispatch(Event* e){
-	for(Listener* listener : this->_listeners){
+	for(auto& listener : this->_listeners){
 		listener->onEvent(e);
-		HandledEvent* he = static_cast<HandledEvent*>(e);
-		if(he->handled()){
+		if(e->handled()){
 			break;
 		}
 	}

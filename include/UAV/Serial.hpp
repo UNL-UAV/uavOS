@@ -1,7 +1,8 @@
 #pragma once
+#include "Core.hpp"
 #include "pch.hpp"
 namespace UNL::UAV{
-class Serial{
+class _API Serial{
 private:
 	int _fd;
 	pthread_mutex_t  _lock;

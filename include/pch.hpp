@@ -21,3 +21,5 @@
 #include <pthread.h>
 #include <thread>
 #include <signal.h>
+
+#include <type_traits>

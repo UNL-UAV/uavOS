@@ -1,4 +1,5 @@
 #include "UAV/Serial.hpp"
+#include "UAV/Log.hpp"
 namespace UNL::UAV{
 Serial::Serial(std::string& name, int baudrate) : _uartName(name), _baudrate(baudrate){
 	this->_fd = -1;
@@ -6,7 +7,7 @@ Serial::Serial(std::string& name, int baudrate) : _uartName(name), _baudrate(bau
 
 	int result = pthread_mutex_init(&_lock, NULL);
 	if (result != 0 ){
-		std::cout << "Failed to create Mutex" << std::endl;
+		UNL::UAV::Log::getLogger()->error("Failed to create mutex");
 		throw 1;
 	}
 };
@@ -14,24 +15,25 @@ Serial::~Serial(){
 	pthread_mutex_destroy(&_lock);
 }
 void Serial::start(){
+	UNL::UAV::Log::getLogger()->info("Starting to connect to PIXHAWK");
 	{ //Open Port
 		this->_fd = open(this->_uartName.data(), O_RDWR | O_NOCTTY | O_NDELAY);
 		if(this->_fd == -1){
-			std::cout << "Could not open port!" << std::endl;
+			UNL::UAV::Log::getLogger()->error("Could not open port");
 			std::exit(-1);
 		}
 		fcntl(this->_fd, F_SETFL, 0);
 	}
 	{ // Setup the port
 		if(!isatty(this->_fd)){
-			std::cout << this->_uartName << " is not Serial Port!" << std::endl;
+			UNL::UAV::Log::getLogger()->error(this->_uartName+" is not Serial Port!");
 			std::exit(-1);
 		}
 
 		// Read file descritor configuration
 		struct termios  config;
 		if(tcgetattr(this->_fd, &config) < 0){
-			std::cout << "ERROR: could not read configuration" << std::endl;
+			UNL::UAV::Log::getLogger()->error("ERROR: could not read configuration");
 			std::exit(-1);
 		}
 
@@ -83,7 +85,7 @@ void Serial::start(){
 		switch (this->_baudrate){
 			case 1200:
 				if (cfsetispeed(&config, B1200) < 0 || cfsetospeed(&config, B1200) < 0){
-					std::cout << "Could not set desired baudrate!" << std::endl;
+					UNL::UAV::Log::getLogger()->error("Could not set desired baudrate!");
 					std::exit(-1);
 				}
 				break;
@@ -101,19 +103,19 @@ void Serial::start(){
 				break;
 			case 38400:
 				if (cfsetispeed(&config, 38400) < 0 || cfsetospeed(&config, 38400) < 0){
-					std::cout << "Could not set desired baudrate!" << std::endl;
+					UNL::UAV::Log::getLogger()->error("Could not set desired baudrate!");
 					std::exit(-1);
 				}
 				break;
 			case 57600:
 				if (cfsetispeed(&config, 57600) < 0 || cfsetospeed(&config, 57600) < 0){
-					std::cout << "Could not set desired baudrate!" << std::endl;
+					UNL::UAV::Log::getLogger()->error("Could not set desired baudrate!");
 					std::exit(-1);
 				}
 				break;
 			case 115200:
 				if (cfsetispeed(&config, 115200) < 0 || cfsetospeed(&config, 115200) < 0){
-					std::cout << "Could not set desired baudrate!" << std::endl;
+					UNL::UAV::Log::getLogger()->error("Could not set desired baudrate!");
 					std::exit(-1);
 				}
 				break;
@@ -122,18 +124,18 @@ void Serial::start(){
 			// current Debian and Mac OS versions (tested since 2010).
 			case 460800:
 				if (cfsetispeed(&config, 460800) < 0 || cfsetospeed(&config, 460800) < 0){
-					std::cout << "Could not set desired baudrate!" << std::endl;
+					UNL::UAV::Log::getLogger()->error("Could not set desired baudrate!");
 					std::exit(-1);
 				}
 				break;
 			case 921600:
 				if (cfsetispeed(&config, 921600) < 0 || cfsetospeed(&config, 921600) < 0){
-					std::cout << "Could not set desired baudrate!" << std::endl;
+					UNL::UAV::Log::getLogger()->error("Could not set desired baudrate!");
 					std::exit(-1);
 				}
 				break;
 			default:
-				std::cout << "Could not set desired baudrate!" << std::endl;
+				UNL::UAV::Log::getLogger()->error("Could not set desired baudrate!");
 				std::exit(-1);
 
 				break;
@@ -141,7 +143,7 @@ void Serial::start(){
 
 		// Finally, apply the configuration
 		if(tcsetattr(this->_fd, TCSAFLUSH, &config) < 0){
-			std::cout << "Could not set configuration!" << std::endl;
+			UNL::UAV::Log::getLogger()->error("Could not set configuration!");
 			std::exit(-1);
 		}
 	}
@@ -150,7 +152,7 @@ void Serial::start(){
 void Serial::stop(){
 	int result = close(this->_fd);
 	if(result){
-		std::cout << "Unable to close port "<< std::endl;
+		UNL::UAV::Log::getLogger()->error("Unable to close port!");
 	}
 }
 

@@ -2,6 +2,7 @@ outputdir = "%{cfg.buildcfg}/%{cfg.system}-%{cfg.architecture}"
 
 includeDir = {}
 includeDir["mavLibV2"] = "vendor/mavlink_libv2"
+includeDir["spdlog"] = "vendor/spdlog/include"
 workspace "uavOS"
 	startproject "source"
 	location "workspace"
@@ -39,11 +40,13 @@ workspace "uavOS"
 	filter "configurations:Release"
 		defines "UAV_RELEASE"
 		optimize "On"
-project "Source"
+project "Core"
 	cppdialect "C++17"
-	location "workspace/source"
-	kind "ConsoleApp"
+	location "workspace/core"
+	kind "SharedLib"
 	language "C++"
+
+	defines {"_DLL"}
 
 	targetdir ("bin/" .. outputdir)
 	objdir ("bin-int/" .. outputdir)
@@ -57,7 +60,32 @@ project "Source"
 	includedirs{
 		"src",
 		"include",
-		includeDir["mavLibV2"]
+		includeDir["mavLibV2"],
+		includeDir["spdlog"]
+	}
+project "Source"
+	cppdialect "C++17"
+	location "workspace/source"
+	kind "ConsoleApp"
+	language "C++"
+
+	targetdir ("bin/" .. outputdir)
+	objdir ("bin-int/" .. outputdir)
+
+	files{
+		"main/**.h",
+		"main/**.hpp",
+		"main/**.c",
+		"main/**.cpp"
+	}
+	includedirs{
+		"src",
+		"include",
+		includeDir["mavLibV2"],
+		includeDir["spdlog"]
+	}
+	links{
+		"Core"
 	}
 project "Test"
 	cppdialect "C++17"
@@ -69,7 +97,7 @@ project "Test"
 	objdir ("bin-int/" .. outputdir)
 
 	links{
-		"Source"
+		"Core"
 	}
 
 	files{
@@ -85,5 +113,7 @@ project "Test"
 	includedirs{
 		"src",
 		"include",
-		"include/test"
+		"include/test",
+		includeDir["mavLibV2"],
+		includeDir["spdlog"]
 	}

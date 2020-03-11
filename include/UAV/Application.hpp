@@ -1,11 +1,12 @@
 #pragma once
 #include "pch.hpp"
+#include "Core.hpp"
 #include "Serial.hpp"
 #include "event/Dispatcher.hpp"
 #include "common/mavlink.h"
 
 namespace UNL::UAV{
-class Application{
+class _API Application{
 private:
 	Serial _serial;
 	Event::Dispatcher _readDispacher;

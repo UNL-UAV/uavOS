@@ -1,9 +1,10 @@
 #pragma once
 #include "pch.hpp"
+#include "../Core.hpp"
 #include "Listener.hpp"
 #include "Event.hpp"
 namespace UNL::UAV::Event{
-class Dispatcher{
+class _API Dispatcher{
 private:
 	std::vector<Listener*> _listeners;
 public:

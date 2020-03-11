@@ -1,10 +1,9 @@
 #pragma once
+#include "../Core.hpp"
 #include "pch.hpp"
 
 namespace UNL::UAV::Event{
-class Event{};
-class HandledEvent : public Event{
-public:
-	virtual bool handled() = 0;
+class _API Event{public:
+	inline virtual bool handled() {return false;};
 };
 };
