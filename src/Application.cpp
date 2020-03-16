@@ -58,7 +58,7 @@ void* Application::heartbeatThread(){
 	auto last = std::chrono::high_resolution_clock::now();
 	while(_running){
 		auto now = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<float> time = last - now;
+		std::chrono::duration<float> time =  now - last;
 		if(time.count() > 1.0f){
 			mavlink_message_t message;
 			mavlink_heartbeat_t heartbeat;
@@ -87,7 +87,7 @@ void Application::writeMavlink(mavlink_message_t* message){
 	char buffer[300];
 	unsigned len = mavlink_msg_to_send_buffer((uint8_t*)buffer, message);
 	int leng = _serial.write(buffer, len);
-	UNL::UAV::Log::getLogger()->info(std::string("Write> ID:")+std::to_string(message->msgid)+std::string(" Write Length: ")+ std::to_string(leng) + std::string(" bufferLength: ")+ std::to_string(len));
+	UNL::UAV::Log::getWriter()->info(message->msgid);
 }
 
 Application::~Application(){
