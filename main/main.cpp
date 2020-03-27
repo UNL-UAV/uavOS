@@ -6,8 +6,8 @@
 int main(int argc, char** argv){
 	UNL::UAV::Log::init();
 	UNL::UAV::Log::getLogger()->info("Starting to connect to PIXHAWK");
-	std::string port = "/dev/cu.usbmodem14101";
-	UNL::UAV::Serial serial(port, 57600);
+	std::string port = "/dev/ttyACM0";
+	UNL::UAV::Serial serial(port, 9600);
 	UNL::UAV::Application app(serial);
 	
 	UNL::UAV::Listener::SerialReadListener srl;

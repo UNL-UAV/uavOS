@@ -85,7 +85,8 @@ project "Source"
 		includeDir["spdlog"]
 	}
 	links{
-		"Core"
+		"Core",
+		"pthread"
 	}
 project "Test"
 	cppdialect "C++17"
@@ -97,7 +98,8 @@ project "Test"
 	objdir ("bin-int/" .. outputdir)
 
 	links{
-		"Core"
+		"Core",
+		"pthread"
 	}
 
 	files{
