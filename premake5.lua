@@ -120,10 +120,8 @@ project "Test"
 		"include",
 		"include/test",
 		includeDir["mavLibV2"],
-<<<<<<< HEAD
-		includeDir["spdlog"]
-=======
+
 		includeDir["spdlog"],
 		includeDir["cxxopt"]
->>>>>>> b91de7b64c13a30e87d0718956da5118e98e42c4
+
 	}
