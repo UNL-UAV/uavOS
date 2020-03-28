@@ -90,31 +90,31 @@ void Serial::start(){
 				}
 				break;
 			case 1800:
-				cfsetispeed(&config, 1800);
-				cfsetospeed(&config, 1800);
+				cfsetispeed(&config, B1800);
+				cfsetospeed(&config, B1800);
 				break;
 			case 9600:
-				cfsetispeed(&config, 9600);
-				cfsetospeed(&config, 9600);
+				cfsetispeed(&config, B9600);
+				cfsetospeed(&config, B9600);
 				break;
 			case 19200:
-				cfsetispeed(&config, 19200);
-				cfsetospeed(&config, 19200);
+				cfsetispeed(&config, B19200);
+				cfsetospeed(&config, B19200);
 				break;
 			case 38400:
-				if (cfsetispeed(&config, 38400) < 0 || cfsetospeed(&config, 38400) < 0){
+				if (cfsetispeed(&config, B38400) < 0 || cfsetospeed(&config, B38400) < 0){
 					UNL::UAV::Log::getLogger()->error("Could not set desired baudrate!");
 					std::exit(-1);
 				}
 				break;
 			case 57600:
-				if (cfsetispeed(&config, 57600) < 0 || cfsetospeed(&config, 57600) < 0){
+				if (cfsetispeed(&config, B57600) < 0 || cfsetospeed(&config, B57600) < 0){
 					UNL::UAV::Log::getLogger()->error("Could not set desired baudrate!");
 					std::exit(-1);
 				}
 				break;
 			case 115200:
-				if (cfsetispeed(&config, 115200) < 0 || cfsetospeed(&config, 115200) < 0){
+				if (cfsetispeed(&config, B115200) < 0 || cfsetospeed(&config, B115200) < 0){
 					UNL::UAV::Log::getLogger()->error("Could not set desired baudrate!");
 					std::exit(-1);
 				}
@@ -123,13 +123,13 @@ void Serial::start(){
 			// These two non-standard (by the 70'ties ) rates are fully supported on
 			// current Debian and Mac OS versions (tested since 2010).
 			case 460800:
-				if (cfsetispeed(&config, 460800) < 0 || cfsetospeed(&config, 460800) < 0){
+				if (cfsetispeed(&config, B460800) < 0 || cfsetospeed(&config, B460800) < 0){
 					UNL::UAV::Log::getLogger()->error("Could not set desired baudrate!");
 					std::exit(-1);
 				}
 				break;
 			case 921600:
-				if (cfsetispeed(&config, 921600) < 0 || cfsetospeed(&config, 921600) < 0){
+				if (cfsetispeed(&config, B921600) < 0 || cfsetospeed(&config, B921600) < 0){
 					UNL::UAV::Log::getLogger()->error("Could not set desired baudrate!");
 					std::exit(-1);
 				}

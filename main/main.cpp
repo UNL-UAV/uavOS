@@ -3,15 +3,47 @@
 #include "common/mavlink.h"
 #include "UAV/Log.hpp"
 #include "UAV/listeners/SerialReadListener.hpp"
+#include "UAV/listeners/StatusTextListener.hpp"
+#include "UAV/listeners/ParamValueListener.hpp"
+#include "cxxopts.hpp"
+
 int main(int argc, char** argv){
+	cxxopts::Options options("uavOS", "Interface with the Computer and the PixHawk");
+	options.add_options()
+		("p,port", "Port", cxxopts::value<std::string>())
+		("r,rate", "Baudrate", cxxopts::value<int>()->default_value("57600"))
+		("h,help", "Help")
+	;
+
+	auto result = options.parse(argc, argv);
+
+	if(result.count("help")){
+		std::cout << options.help() << std::endl;
+		return 0;
+	}
+
+	if(!result.count("port") || !result.count("rate")){
+		std::cout << "Not enought arguments use --help for more help!" << std::endl;
+		return -1;
+	}
+
+	std::string port = result["port"].as<std::string>();
+	int rate = result["rate"].as<int>();
+
 	UNL::UAV::Log::init();
-	UNL::UAV::Log::getLogger()->info("Starting to connect to PIXHAWK");
-	std::string port = "/dev/ttyACM0";
-	UNL::UAV::Serial serial(port, 9600);
+
+	UNL::UAV::Serial serial(port, rate);
+
 	UNL::UAV::Application app(serial);
 	
 	UNL::UAV::Listener::SerialReadListener srl;
 	app.addReadListener(srl);
+
+	UNL::UAV::Listener::StatusTextListener stl;
+	app.addReadListener(stl);
+
+	//UNL::UAV::Listener::ParamValueListener pvl;
+	//app.addReadListener(pvl);
 	
 	app.init();
 	while(app.isRunning());

@@ -3,6 +3,7 @@ outputdir = "%{cfg.buildcfg}/%{cfg.system}-%{cfg.architecture}"
 includeDir = {}
 includeDir["mavLibV2"] = "vendor/mavlink_libv2"
 includeDir["spdlog"] = "vendor/spdlog/include"
+includeDir["cxxopt"] = "vendor/cxxopts/include"
 workspace "uavOS"
 	startproject "source"
 	location "workspace"
@@ -61,7 +62,8 @@ project "Core"
 		"src",
 		"include",
 		includeDir["mavLibV2"],
-		includeDir["spdlog"]
+		includeDir["spdlog"],
+		includeDir["cxxopt"]
 	}
 project "Source"
 	cppdialect "C++17"
@@ -82,7 +84,8 @@ project "Source"
 		"src",
 		"include",
 		includeDir["mavLibV2"],
-		includeDir["spdlog"]
+		includeDir["spdlog"],
+		includeDir["cxxopt"]
 	}
 	links{
 		"Core",
@@ -117,5 +120,10 @@ project "Test"
 		"include",
 		"include/test",
 		includeDir["mavLibV2"],
+<<<<<<< HEAD
 		includeDir["spdlog"]
+=======
+		includeDir["spdlog"],
+		includeDir["cxxopt"]
+>>>>>>> b91de7b64c13a30e87d0718956da5118e98e42c4
 	}

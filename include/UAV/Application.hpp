@@ -13,6 +13,8 @@ private:
 	bool _running = true;
 	pthread_t _readThreadID;
 	pthread_t _writeThreadID;
+	pthread_t _heartbeatThreadID;
+
 public:
 	Application(const Serial& serial);
 
@@ -20,13 +22,14 @@ public:
 
 	void* readThread();
 	void* writeThread();
+	void* heartbeatThread();
 
 	void addReadListener(Event::Listener& listener);
 	void quitHandler( int sig );
 
-	void mavWriter(mavlink_message_t* msg);
+	void writeMavlink(mavlink_message_t* msg);
 
-	inline bool isRunning() const {return this->_running;}
+	inline bool isRunning() const {return this->_running;};
 
 	~Application();
 };
