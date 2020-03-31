@@ -1,6 +1,7 @@
 #include "UAV/Application.hpp"
 #include "UAV/events/PacketReceivedEvent.hpp"
 #include "UAV/Log.hpp"
+#include "UAV/events/CommandReceivedEvent.hpp"
 namespace UNL::UAV{
 Application::Application(const Serial& serial): _serial(serial){
 
@@ -27,6 +28,10 @@ void Application::init(){
 
 void Application::addReadListener(UNL::UAV::Event::Listener& listener){
 	this->_readDispacher.addListener(&listener);
+}
+
+void Application::addCommand(UNL::UAV::Event::Listener& listener){
+	this->_commandDispatcher.addListener(&listener);
 }
 
 void* Application::readThread(){
@@ -72,6 +77,13 @@ void* Application::heartbeatThread(){
 		}
 	}
 	::pthread_exit(NULL);
+}
+
+void Application::update(){
+	std::string str;
+	getline(std::cin, str);
+	UNL::UAV::Events::CommandReceivedEvent cre = UNL::UAV::Events::CommandReceivedEvent(_serial, str);
+	this->_commandDispatcher.dispatch(&cre);
 }
 
 void Application::quitHandler(int sig){
