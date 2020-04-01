@@ -1,3 +1,8 @@
+/*
+
+	Code that is responsible for the Test executable in bin.
+
+*/
 #include "pch.hpp"
 #include "UAV/uavOS.hpp"
 

@@ -1,3 +1,9 @@
+/*
+
+	Code that is responsible for the Source executable in bin.
+
+*/
+
 #include "pch.hpp"
 #include "UAV/uavOS.hpp"
 #include "common/mavlink.h"
@@ -8,6 +14,7 @@
 #include "cxxopts.hpp"
 
 int main(int argc, char** argv){
+	//Beginning the set-up
 	cxxopts::Options options("uavOS", "Interface with the Computer and the PixHawk");
 	options.add_options()
 		("p,port", "Port", cxxopts::value<std::string>())
@@ -29,13 +36,15 @@ int main(int argc, char** argv){
 
 	std::string port = result["port"].as<std::string>();
 	int rate = result["rate"].as<int>();
+	//Ending the set-up
 
+	//initializes the log
 	UNL::UAV::Log::init();
 
 	UNL::UAV::Serial serial(port, rate);
 
 	UNL::UAV::Application app(serial);
-	
+
 	UNL::UAV::Listener::SerialReadListener srl;
 	app.addReadListener(srl);
 
@@ -44,8 +53,10 @@ int main(int argc, char** argv){
 
 	//UNL::UAV::Listener::ParamValueListener pvl;
 	//app.addReadListener(pvl);
-	
+
 	app.init();
-	while(app.isRunning());
+	while(app.isRunning()){
+		
+	}
 	return 0;
 }

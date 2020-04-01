@@ -1,11 +1,13 @@
 #include "UAV/Application.hpp"
 #include "UAV/events/PacketReceivedEvent.hpp"
 #include "UAV/Log.hpp"
+#include <string.h>
 namespace UNL::UAV{
 Application::Application(const Serial& serial): _serial(serial){
 
 }
 
+//outputs to the log, initilization debugging messages
 void Application::init(){
 	this->_serial.start();
 	
@@ -42,6 +44,8 @@ void* Application::readThread(){
 			if(hasDecoded){
 				Events::PacketReceivedEvent event = Events::PacketReceivedEvent(this->_serial, msg);
 				this->_readDispacher.dispatch(&event);
+				uint64_t data;
+				std::cout << *msg.payload64 << std::endl;
 			}
 		}
 	}
@@ -62,6 +66,9 @@ void* Application::heartbeatThread(){
 		if(time.count() > 1.0f){
 			mavlink_message_t message;
 			mavlink_heartbeat_t heartbeat;
+
+			//Ground control station type
+			heartbeat.type = MAV_TYPE_GCS;
 
 			mavlink_msg_heartbeat_encode(0xFF, 0xBE, &message, &heartbeat);
 			
