@@ -41,6 +41,7 @@ void* Application::readThread(){
 	mavlink_message_t msg;
 	mavlink_status_t status;
 	mavlink_attitude_t attitude;
+	mavlink_heartbeat_t heartbeat;
 
 	while(_running){
 		uint8_t cp;
@@ -53,13 +54,22 @@ void* Application::readThread(){
 				uint64_t data;
 				if(msg.msgid == 30){
 					mavlink_msg_attitude_decode(&msg, &attitude);
-					std::cout << "Pixhawk boot time: " << attitude.time_boot_ms << std::endl;
+					std::cout << "time since boot(ms): " << attitude.time_boot_ms << std::endl;
 					std::cout << "pitch: " << attitude.pitch << std::endl;
 					std::cout << "pitchspeed: " << attitude.pitchspeed << std::endl;
 					std::cout << "roll: " << attitude.roll << std::endl;
 					std::cout << "rollspeed: " << attitude.rollspeed << std::endl;
 					std::cout << "yaw: " << attitude.yaw << std::endl;
 					std::cout << "yawspeed: " << attitude.yawspeed << std::endl;
+				}
+				else if(msg.msgid == 0){
+					mavlink_msg_heartbeat_decode(&msg, &heartbeat);
+					std::cout << "Vehicle type: " << heartbeat.type << std::endl;
+					std::cout << "autopilot: " << heartbeat.autopilot << std::endl;
+					std::cout << "Base Mode: " << heartbeat.base_mode << std::endl;
+					std::cout << "Custome Mode: " << heartbeat.custom_mode << std::endl;
+					std::cout << "System Status: " << heartbeat.system_status << std::endl;
+					std::cout << "Mavlink Version: " << heartbeat.mavlink_version << std::endl;
 				}
 			}
 		}
