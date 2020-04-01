@@ -11,6 +11,7 @@
 #include "UAV/listeners/SerialReadListener.hpp"
 #include "UAV/listeners/StatusTextListener.hpp"
 #include "UAV/listeners/ParamValueListener.hpp"
+#include "UAV/listeners/command/ArmedListener.hpp"
 #include "cxxopts.hpp"
 
 int main(int argc, char** argv){
@@ -53,10 +54,13 @@ int main(int argc, char** argv){
 
 	//UNL::UAV::Listener::ParamValueListener pvl;
 	//app.addReadListener(pvl);
-
+	
+	UNL::UAV::Listener::Command::ArmedListener al;
+	app.addCommand(al);
+	
 	app.init();
 	while(app.isRunning()){
-		
+		app.update();
 	}
 	return 0;
 }
