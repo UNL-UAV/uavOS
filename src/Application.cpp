@@ -40,6 +40,7 @@ void* Application::readThread(){
 	uint8_t hasDecoded =0;
 	mavlink_message_t msg;
 	mavlink_status_t status;
+	mavlink_attitude_t attitude;
 
 	while(_running){
 		uint8_t cp;
@@ -50,7 +51,16 @@ void* Application::readThread(){
 				Events::PacketReceivedEvent event = Events::PacketReceivedEvent(this->_serial, msg);
 				this->_readDispacher.dispatch(&event);
 				uint64_t data;
-				std::cout << *msg.payload64 << std::endl;
+				if(msg.msgid == 30){
+					mavlink_msg_attitude_decode(&msg, &attitude);
+					std::cout << "Pixhawk boot time: " << attitude.time_boot_ms << std::endl;
+					std::cout << "pitch: " << attitude.pitch << std::endl;
+					std::cout << "pitchspeed: " << attitude.pitchspeed << std::endl;
+					std::cout << "roll: " << attitude.roll << std::endl;
+					std::cout << "rollspeed: " << attitude.rollspeed << std::endl;
+					std::cout << "yaw: " << attitude.yaw << std::endl;
+					std::cout << "yawspeed: " << attitude.yawspeed << std::endl;
+				}
 			}
 		}
 	}
