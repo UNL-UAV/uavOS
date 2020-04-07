@@ -41,8 +41,6 @@ void* Application::readThread(){
 	uint8_t hasDecoded =0;
 	mavlink_message_t msg;
 	mavlink_status_t status;
-	mavlink_attitude_t attitude;
-	mavlink_heartbeat_t heartbeat;
 
 	while(_running){
 		uint8_t cp;

@@ -29,16 +29,16 @@ namespace UNL::UAV::Listener::Message{
         mavlink_message_t msg = MRE->getMessage();
         Drone droneData;
         switch(msg.msgid){
-            case MAVLINK_MSG_ID_ATTITUDE : //droneData.updateAttitude(msg);
+            case MAVLINK_MSG_ID_ATTITUDE : droneData.updateAttitude(msg);
             std::cout << "Attitude updated" << std::endl;
             break;
-            case MAVLINK_MSG_ID_HEARTBEAT : //droneData.updateHeartbeat(msg);
+            case MAVLINK_MSG_ID_HEARTBEAT : droneData.updateHeartbeat(msg);
             std::cout << "Heartbeat updated" << std::endl;
             break;
-            case MAVLINK_MSG_ID_VFR_HUD : //droneData.updateHeadupDisplay(msg);
+            case MAVLINK_MSG_ID_VFR_HUD : droneData.updateHeadupDisplay(msg);
             std::cout << "HUD updated" << std::endl;
             break;
-            default: //do nothing
+            default: std::cout << "default" << std::endl;
             break;
         }
     }

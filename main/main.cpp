@@ -13,6 +13,7 @@
 #include "UAV/listeners/ParamValueListener.hpp"
 #include "UAV/listeners/command/ArmedListener.hpp"
 #include "cxxopts.hpp"
+#include "UAV/listeners/message/MessageListener.hpp"
 
 int main(int argc, char** argv){
 	//Beginning the set-up
@@ -59,6 +60,9 @@ int main(int argc, char** argv){
 	
 	UNL::UAV::Listener::Command::ArmedListener al;
 	app.addCommand(al);
+
+	UNL::UAV::Listener::Message::MessageListener ml;
+	app.addCommand(ml);
 	
 	app.init();
 	while(app.isRunning()){
