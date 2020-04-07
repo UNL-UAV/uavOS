@@ -23,6 +23,7 @@ int main(int argc, char** argv){
 		("h,help", "Help")
 	;
 
+	//The commands given in command line are parsed
 	auto result = options.parse(argc, argv);
 
 	if(result.count("help")){
@@ -42,6 +43,7 @@ int main(int argc, char** argv){
 	//initializes the log
 	UNL::UAV::Log::init();
 
+	//starts the serial interface
 	UNL::UAV::Serial serial(port, rate);
 
 	UNL::UAV::Application app(serial);
